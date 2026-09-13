@@ -12,14 +12,26 @@
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list>
-        <q-item to="/uploaders" clickable v-ripple>
+        <q-item
+          clickable
+          v-ripple
+          :active="uiStore.activeView === 'uploaders'"
+          active-class="text-primary"
+          @click="uiStore.setView('uploaders')"
+        >
           <q-item-section avatar>
             <q-icon name="upload" />
           </q-item-section>
           <q-item-section>Torrent Uploaders</q-item-section>
         </q-item>
 
-        <q-item to="/whitelist" clickable v-ripple>
+        <q-item
+          clickable
+          v-ripple
+          :active="uiStore.activeView === 'whitelist'"
+          active-class="text-primary"
+          @click="uiStore.setView('whitelist')"
+        >
           <q-item-section avatar>
             <q-icon name="checklist" />
           </q-item-section>
@@ -36,7 +48,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useUiStore } from '@/stores/ui-store';
 
+const uiStore = useUiStore();
 const leftDrawerOpen = ref(false);
 
 function toggleLeftDrawer() {

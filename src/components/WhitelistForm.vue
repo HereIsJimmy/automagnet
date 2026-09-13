@@ -1,8 +1,6 @@
 <template>
-  <q-page class="q-pa-md">
-    <div class="text-h6 q-mb-md">Whitelist</div>
-
-    <q-markup-table flat bordered>
+  <div>
+    <q-markup-table flat bordered class="whitelist-table">
       <thead>
         <tr>
           <th class="text-left">Text</th>
@@ -29,7 +27,7 @@
         </tr>
       </tbody>
     </q-markup-table>
-  </q-page>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -90,6 +88,10 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+.whitelist-table {
+  max-width: 1200px;
+}
+
 .selectable-cell {
   user-select: text;
   cursor: text;

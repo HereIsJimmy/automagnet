@@ -1,7 +1,5 @@
 <template>
-  <q-page class="q-pa-md">
-    <div class="text-h6 q-mb-md">Torrent Uploaders</div>
-
+  <div>
     <div v-if="store.uploaders.length === 0" class="q-mb-md">
       <q-banner class="bg-grey-3">
         No uploaders yet.
@@ -43,7 +41,7 @@
         @click="removeUploader(index)"
       />
     </div>
-  </q-page>
+  </div>
 </template>
 
 <script setup lang="ts">
