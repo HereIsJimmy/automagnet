@@ -12,7 +12,7 @@
     </q-tabs>
 
     <UploadersForm v-if="uiStore.activeView === 'uploaders'" />
-    <WhitelistForm v-else />
+    <WhitelistForm v-else :items="whitelistItems" />
 
     <div class="q-mt-lg">
       <q-btn
@@ -29,19 +29,27 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useUiStore } from '@/stores/ui-store';
+import { useConfigStore } from '@/stores/config-store';
 import UploadersForm from '@/components/UploadersForm.vue';
 import WhitelistForm from '@/components/WhitelistForm.vue';
-import { startScanning } from '@/lib/scanner';
+import { startScanning, extractData, ResultStatus } from '@/lib/scanner';
 
 const uiStore = useUiStore();
+const configStore = useConfigStore();
 const scanning = ref(false);
+const whitelistItems = ref<string[]>([]);
 
 async function onStartScanning() {
   if (scanning.value) return;
 
   scanning.value = true;
   try {
-    await startScanning();
+    if (!configStore.loaded) await configStore.load();
+
+    const results = await startScanning(configStore.uploaders, configStore.whitelist);
+    whitelistItems.value = results
+      .filter((result) => result.status !== ResultStatus.Filtered)
+      .map((result) => extractData(result.row).title);
   } finally {
     scanning.value = false;
   }
