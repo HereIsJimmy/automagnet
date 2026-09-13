@@ -22,10 +22,22 @@
  * https://www.electronjs.org/docs/latest/tutorial/tutorial-preload
  */
 
-import { contextBridge } from "electron";
+import { contextBridge, ipcRenderer } from "electron";
 import { quasarRuntime } from "#q-app/electron/preload";
+import type { AppConfig } from "./config-store";
 
 /**
  * Can be used in the renderer process through `window.quasarRuntime`
  */
 contextBridge.exposeInMainWorld("quasarRuntime", quasarRuntime);
+
+/**
+ * Can be used in the renderer process through `window.configAPI`
+ */
+contextBridge.exposeInMainWorld("configAPI", {
+  getConfig: (): Promise<AppConfig> => ipcRenderer.invoke("config:get"),
+  setUploaders: (uploaders: string[]): Promise<void> =>
+    ipcRenderer.invoke("config:setUploaders", uploaders),
+  setWhitelist: (whitelist: string[]): Promise<void> =>
+    ipcRenderer.invoke("config:setWhitelist", whitelist),
+});

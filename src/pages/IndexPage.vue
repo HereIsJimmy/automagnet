@@ -1,13 +1,12 @@
 <template>
   <q-page class="flex flex-center">
-    <div class="column items-center">
-      <img
-        alt="Quasar logo"
-        src="~@/assets/quasar-logo-vertical.svg"
-        style="width: 200px; height: 200px"
-      />
+    <div class="column items-center q-gutter-md">
+      <div class="text-h4">Automagnet</div>
 
-      <q-btn class="q-mt-md" color="primary" to="/second" label="Go to Second Page" no-caps />
+      <div class="row q-gutter-sm">
+        <q-btn color="primary" to="/uploaders" label="Torrent Uploaders" no-caps />
+        <q-btn color="primary" to="/whitelist" label="Whitelist" no-caps />
+      </div>
     </div>
   </q-page>
 </template>

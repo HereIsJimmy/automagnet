@@ -1,10 +1,11 @@
-import { BrowserWindow, app } from "electron";
+import { BrowserWindow, app, ipcMain } from "electron";
 import path from "node:path";
 import os from "node:os";
 import {
   registerQuasarRuntime,
   resolveElectronAssetsPath
 } from "#q-app/electron/main";
+import { readConfig, saveUploaders, saveWhitelist } from "./config-store";
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform();
@@ -41,6 +42,14 @@ async function createWindow() {
     });
   }
 }
+
+ipcMain.handle("config:get", () => readConfig());
+ipcMain.handle("config:setUploaders", (_event, uploaders: string[]) => {
+  saveUploaders(uploaders);
+});
+ipcMain.handle("config:setWhitelist", (_event, whitelist: string[]) => {
+  saveWhitelist(whitelist);
+});
 
 void app.whenReady().then(() => {
   registerQuasarRuntime();
