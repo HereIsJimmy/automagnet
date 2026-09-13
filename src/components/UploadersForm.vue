@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="uploaders-form">
     <div v-if="store.uploaders.length === 0" class="q-mb-md">
       <q-banner class="bg-grey-3">
         No uploaders yet.
@@ -77,3 +77,9 @@ function removeUploader(index: number) {
   void store.saveUploaders();
 }
 </script>
+
+<style scoped>
+.uploaders-form {
+  max-width: 1200px;
+}
+</style>
