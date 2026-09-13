@@ -41,3 +41,16 @@ contextBridge.exposeInMainWorld("configAPI", {
   setWhitelist: (whitelist: string[]): Promise<void> =>
     ipcRenderer.invoke("config:setWhitelist", whitelist),
 });
+
+/**
+ * Fetches happen in the main process (via `window.netAPI`) instead of the
+ * renderer because the renderer enforces the same browser CORS rules as
+ * Chrome; third-party sites like [URL] don't send CORS headers, so a
+ * renderer-side fetch() is blocked outright. Node's fetch in the main
+ * process has no such restriction.
+ *
+ * Can be used in the renderer process through `window.netAPI`
+ */
+contextBridge.exposeInMainWorld("netAPI", {
+  fetchText: (url: string): Promise<string> => ipcRenderer.invoke("net:fetchText", url),
+});

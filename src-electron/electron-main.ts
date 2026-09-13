@@ -1,4 +1,4 @@
-import { BrowserWindow, app, ipcMain } from "electron";
+import { BrowserWindow, app, ipcMain, shell } from "electron";
 import path from "node:path";
 import os from "node:os";
 import {
@@ -26,6 +26,15 @@ async function createWindow() {
     }
   });
 
+  // magnet: links can't be navigated to directly; hand them off to the OS's
+  // default torrent client instead of letting the window try (and fail) to load them
+  mainWindow.webContents.on("will-navigate", (event, url) => {
+    if (url.startsWith("magnet:")) {
+      event.preventDefault();
+      void shell.openExternal(url);
+    }
+  });
+
   if (import.meta.env.QUASAR_DEV) {
     await mainWindow.loadURL(import.meta.env.QUASAR_APP_URL);
   } else {
@@ -49,6 +58,11 @@ ipcMain.handle("config:setUploaders", (_event, uploaders: string[]) => {
 });
 ipcMain.handle("config:setWhitelist", (_event, whitelist: string[]) => {
   saveWhitelist(whitelist);
+});
+
+ipcMain.handle("net:fetchText", async (_event, url: string) => {
+  const response = await fetch(url);
+  return response.text();
 });
 
 void app.whenReady().then(() => {
