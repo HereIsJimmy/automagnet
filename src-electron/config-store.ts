@@ -5,12 +5,16 @@ import path from "node:path";
 export interface AppConfig {
   uploaders: string[];
   whitelist: string[];
+  lastDownload: string;
 }
 
-const defaultConfig: AppConfig = {
-  uploaders: [],
-  whitelist: [],
-};
+function getDefaultConfig(): AppConfig {
+  return {
+    uploaders: [],
+    whitelist: [],
+    lastDownload: "",
+  };
+}
 
 function getConfigPath(): string {
   return path.join(app.getPath("userData"), "config.json");
@@ -19,9 +23,9 @@ function getConfigPath(): string {
 export function readConfig(): AppConfig {
   try {
     const raw = fs.readFileSync(getConfigPath(), "utf-8");
-    return { ...defaultConfig, ...(JSON.parse(raw) as Partial<AppConfig>) };
+    return { ...getDefaultConfig(), ...(JSON.parse(raw) as Partial<AppConfig>) };
   } catch {
-    return { ...defaultConfig };
+    return getDefaultConfig();
   }
 }
 
@@ -29,6 +33,12 @@ function writeConfig(config: AppConfig): void {
   const configPath = getConfigPath();
   fs.mkdirSync(path.dirname(configPath), { recursive: true });
   fs.writeFileSync(configPath, JSON.stringify(config, null, 2), "utf-8");
+}
+
+export function ensureConfigExists(): void {
+  if (!fs.existsSync(getConfigPath())) {
+    writeConfig(getDefaultConfig());
+  }
 }
 
 export function saveUploaders(uploaders: string[]): void {
@@ -40,5 +50,11 @@ export function saveUploaders(uploaders: string[]): void {
 export function saveWhitelist(whitelist: string[]): void {
   const config = readConfig();
   config.whitelist = whitelist;
+  writeConfig(config);
+}
+
+export function saveLastDownload(lastDownload: string): void {
+  const config = readConfig();
+  config.lastDownload = lastDownload;
   writeConfig(config);
 }

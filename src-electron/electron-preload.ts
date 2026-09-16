@@ -40,6 +40,8 @@ contextBridge.exposeInMainWorld("configAPI", {
     ipcRenderer.invoke("config:setUploaders", uploaders),
   setWhitelist: (whitelist: string[]): Promise<void> =>
     ipcRenderer.invoke("config:setWhitelist", whitelist),
+  setLastDownload: (lastDownload: string): Promise<void> =>
+    ipcRenderer.invoke("config:setLastDownload", lastDownload),
 });
 
 /**

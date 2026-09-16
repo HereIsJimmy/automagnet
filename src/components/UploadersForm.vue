@@ -26,7 +26,7 @@
         round
         dense
         flat
-        icon="add"
+        icon="mdi-plus"
         color="primary"
         aria-label="Add uploader below"
         @click="addUploader(index + 1)"
@@ -35,7 +35,7 @@
         round
         dense
         flat
-        icon="delete"
+        icon="mdi-delete"
         color="negative"
         aria-label="Remove uploader"
         @click="removeUploader(index)"

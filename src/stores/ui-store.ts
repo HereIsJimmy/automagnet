@@ -1,19 +1,24 @@
 import { defineStore, acceptHMRUpdate } from 'pinia';
 
-export type HomeView = 'uploaders' | 'whitelist';
+interface WhitelistItem {
+  title: string;
+  magnet: string;
+  date: string;
+  uploader: string;
+}
 
 interface UiState {
-  activeView: HomeView;
+  scannedItems: WhitelistItem[];
 }
 
 export const useUiStore = defineStore('ui', {
   state: (): UiState => ({
-    activeView: 'uploaders',
+    scannedItems: [],
   }),
 
   actions: {
-    setView(view: HomeView) {
-      this.activeView = view;
+    setScannedItems(items: WhitelistItem[]) {
+      this.scannedItems = items;
     },
   },
 });

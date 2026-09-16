@@ -5,7 +5,13 @@ import {
   registerQuasarRuntime,
   resolveElectronAssetsPath
 } from "#q-app/electron/main";
-import { readConfig, saveUploaders, saveWhitelist } from "./config-store";
+import {
+  ensureConfigExists,
+  readConfig,
+  saveLastDownload,
+  saveUploaders,
+  saveWhitelist,
+} from "./config-store";
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform();
@@ -60,12 +66,17 @@ ipcMain.handle("config:setWhitelist", (_event, whitelist: string[]) => {
   saveWhitelist(whitelist);
 });
 
+ipcMain.handle("config:setLastDownload", (_event, lastDownload: string) => {
+  saveLastDownload(lastDownload);
+});
+
 ipcMain.handle("net:fetchText", async (_event, url: string) => {
   const response = await fetch(url);
   return response.text();
 });
 
 void app.whenReady().then(() => {
+  ensureConfigExists();
   registerQuasarRuntime();
   void createWindow();
 
