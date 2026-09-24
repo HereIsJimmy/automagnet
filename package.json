@@ -1,7 +1,7 @@
 {
   "name": "automagnet",
   "version": "0.0.1",
-  "description": "A Quasar Project",
+  "description": "Magnet scanning app",
   "productName": "Automagnet",
   "author": "HereIsJimmy",
   "type": "module",
