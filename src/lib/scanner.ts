@@ -157,7 +157,9 @@ async function fetchAndScan(lastDownload: string): Promise<HTMLTableRowElement[]
   const rowsToProcess: HTMLTableRowElement[] = [];
   while (scanning) {
     try {
-      const html = await window.netAPI.fetchText(`${BASE_URL}&p=${page}`);
+      const url = new URL(BASE_URL);
+      url.searchParams.set('p', String(page));
+      const html = await window.netAPI.fetchText(url.toString());
       const { stop, rows } = scanDoc(html, lastDownload);
       rowsToProcess.push(...rows);
 
