@@ -200,6 +200,12 @@ function toWhitelistItem(result: Result): WhitelistItem {
   };
 }
 
+function formatNow(): string {
+  const now = new Date();
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+}
+
 function sortByDateDesc(list: WhitelistItem[]): WhitelistItem[] {
   return [...list].sort((a, b) => b.date.localeCompare(a.date));
 }
@@ -214,8 +220,9 @@ const scanError = ref<string | null>(null);
 const openedMagnets = ref<WhitelistItem[]>([]);
 const ignoredResults = ref<WhitelistItem[]>([]);
 
-onMounted(() => {
-  if (!configStore.loaded) void configStore.load();
+onMounted(async () => {
+  if (!configStore.loaded) await configStore.load();
+  if (configStore.lastDownload) await onStartScanning();
 });
 
 function removeWhitelistEntry(entry: string) {
@@ -280,6 +287,7 @@ async function onStartScanning() {
         .filter((result) => result.status === ResultStatus.Whitelisted && !result.opened)
         .map(toWhitelistItem),
     );
+    await configStore.setLastDownload(formatNow());
   } catch (err) {
     if (err instanceof ScanFetchError) {
       scanError.value = `Scanning stopped: ${err.message}`;

@@ -18,22 +18,20 @@ function getMagnet(cLinks: Element | undefined): string {
   return (cLinks?.children[1] as HTMLAnchorElement).href;
 }
 
-// The site reports dates in UTC. For now, just shift by a fixed +2h offset
-// (using UTC math so the result doesn't depend on the host machine's own
-// timezone) rather than doing real timezone-aware parsing.
+// The site reports dates in UTC; convert to the executing machine's local time
+// (DST-aware, since the offset comes from the runtime's timezone rules).
 function parseDate(rawDate: string): string {
   const [datePart = '', timePart = ''] = rawDate.split(' ');
   const [year = 0, month = 1, day = 1] = datePart.split('-').map(Number);
   const [hour = 0, minute = 0] = timePart.split(':').map(Number);
 
   const date = new Date(Date.UTC(year, month - 1, day, hour, minute));
-  date.setUTCHours(date.getUTCHours() + 2);
 
-  const yyyy = date.getUTCFullYear();
-  const mm = String(date.getUTCMonth() + 1).padStart(2, '0');
-  const dd = String(date.getUTCDate()).padStart(2, '0');
-  const hh = String(date.getUTCHours()).padStart(2, '0');
-  const min = String(date.getUTCMinutes()).padStart(2, '0');
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  const hh = String(date.getHours()).padStart(2, '0');
+  const min = String(date.getMinutes()).padStart(2, '0');
   return `${yyyy}-${mm}-${dd} ${hh}:${min}`;
 }
 
