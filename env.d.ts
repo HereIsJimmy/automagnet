@@ -15,4 +15,6 @@
 interface ImportMetaEnv {
   readonly QCLI_BASE_URL: string;
   readonly QCLI_TORRENT_SELECTOR: string;
+  readonly QCLI_SEARCH_URL: string;
+  readonly QCLI_TITLE_LOOKUP_DOMAIN: string;
 }

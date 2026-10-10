@@ -110,6 +110,16 @@
               round
               dense
               flat
+              icon="mdi-web"
+              color="primary"
+              :disable="!SEARCH_URL || !TITLE_LOOKUP_DOMAIN"
+              aria-label="Search online"
+              @click="searchOnline(item.title)"
+            />
+            <q-btn
+              round
+              dense
+              flat
               icon="mdi-delete"
               color="negative"
               :disable="matchesFor(item.title).length === 0"
@@ -167,6 +177,9 @@ interface WhitelistItem {
 const { items } = defineProps<{
   items: WhitelistItem[];
 }>();
+
+const SEARCH_URL = import.meta.env.QCLI_SEARCH_URL;
+const TITLE_LOOKUP_DOMAIN = import.meta.env.QCLI_TITLE_LOOKUP_DOMAIN;
 
 const store = useConfigStore();
 
@@ -284,6 +297,13 @@ const manualEntry = ref('');
 function addManualEntry() {
   addTextToWhitelist(manualEntry.value);
   manualEntry.value = '';
+}
+
+function searchOnline(title: string) {
+  const chapterName = displayTitle(title).split(' - ')[0] ?? '';
+  const url = new URL(SEARCH_URL);
+  url.searchParams.set('q', `${chapterName} site:${TITLE_LOOKUP_DOMAIN}`);
+  window.open(url.toString(), '_blank');
 }
 
 function onMagnetClick(item: WhitelistItem, index: number) {

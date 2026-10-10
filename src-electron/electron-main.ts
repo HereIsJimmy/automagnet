@@ -41,6 +41,15 @@ async function createWindow() {
     }
   });
 
+  // window.open / target="_blank" would otherwise spawn an in-app window;
+  // send web links to the user's default browser instead
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    if (/^https?:\/\//i.test(url)) {
+      void shell.openExternal(url);
+    }
+    return { action: "deny" };
+  });
+
   if (import.meta.env.QUASAR_DEV) {
     await mainWindow.loadURL(import.meta.env.QUASAR_APP_URL);
   } else {

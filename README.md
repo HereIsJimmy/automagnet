@@ -9,10 +9,12 @@ Just **npm i && npm run build** to build the App. It won't work as an SPA, atlea
 2. Use the **Whitelist** in the sidebar to whitelist text (text-select a string and then click either the check or the magnet button). You can just click the magnet button if you don't want to whitelist it yet.
 3. Magnets with the whitelisted text will be automatically **opened when scanning** (which also happens on startup)
 
-
 ### Config
+
 - QCLI_TORRENT_SELECTOR: DOM-querySelects each table row with a magnet link.
 - QCLI_BASE_URL: Url of the web to scrap
+- QCLI_SEARCH_URL: Search engine URL used by the world button in the Whitelist cards (e.g. `https://www.google.com/search`); the query is added as the `q` param
+- QCLI_TITLE_LOOKUP_DOMAIN: Domain that search is restricted to, as `<title> site:<domain>`
 
 ## Install the dependencies
 
