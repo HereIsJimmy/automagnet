@@ -91,15 +91,6 @@
               round
               dense
               flat
-              icon="mdi-link"
-              color="primary"
-              aria-label="Open magnet link"
-              @click="openMagnet(item.magnet)"
-            />
-            <q-btn
-              round
-              dense
-              flat
               size="sm"
               icon="mdi-magnet"
               :color="selectedRowIndex === index ? 'positive' : 'primary'"

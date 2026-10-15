@@ -220,9 +220,8 @@ const scanError = ref<string | null>(null);
 const openedMagnets = ref<WhitelistItem[]>([]);
 const ignoredResults = ref<WhitelistItem[]>([]);
 
-onMounted(async () => {
-  if (!configStore.loaded) await configStore.load();
-  if (configStore.lastDownload) await onStartScanning();
+onMounted(() => {
+  if (!configStore.loaded) void configStore.load();
 });
 
 function removeWhitelistEntry(entry: string) {

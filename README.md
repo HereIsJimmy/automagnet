@@ -7,7 +7,7 @@ Just **npm i && npm run build** to build the App. It won't work as an SPA, atlea
 
 1. Add **Uploaders** in the Uploaders section
 2. Use the **Whitelist** in the sidebar to whitelist text (text-select a string and then click either the check or the magnet button). You can just click the magnet button if you don't want to whitelist it yet.
-3. Magnets with the whitelisted text will be automatically **opened when scanning** (which also happens on startup)
+3. Magnets with the whitelisted text will be automatically **opened when scanning** (press "Start scanning" in the Scan page)
 
 ### Config
 
